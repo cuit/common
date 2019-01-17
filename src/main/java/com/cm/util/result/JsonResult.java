@@ -1,4 +1,4 @@
-package com.cm.util;
+package com.cm.util.result;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

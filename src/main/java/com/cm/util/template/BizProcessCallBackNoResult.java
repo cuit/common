@@ -1,4 +1,4 @@
-package com.cm.util;
+package com.cm.util.template;
 
 /**
  * @author shichao.xia
