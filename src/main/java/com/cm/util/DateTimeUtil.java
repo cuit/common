@@ -1,7 +1,10 @@
 package com.cm.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author shichao.xia
@@ -11,6 +14,12 @@ public class DateTimeUtil {
 
     private static final String YYYY_MM_DD = "yyyy/MM/dd";
 
+    private static final String DD_MM_YYYY = "dd/MM/yyyy";
+
+    private static final String YYYY_MM_DD_1 = "yyyy:MM:dd";
+
+    private static final String DD_MM_YYYY_1 = "dd:MM:yyyy";
+
     private static final ThreadLocal<SimpleDateFormat> LOCAL = ThreadLocal.withInitial(SimpleDateFormat::new);
 
     private static SimpleDateFormat getDateFormat(String pattern) {
@@ -19,12 +28,81 @@ public class DateTimeUtil {
         return simpleDateFormat;
     }
 
-    public static String parseYYYYMMDD(Date date) {
+    public static String parse4Y2M2D(Date date) {
         try {
             return getDateFormat(YYYY_MM_DD).format(date);
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static String parse2D2M4Y(Date date) {
+        try {
+            return getDateFormat(DD_MM_YYYY).format(date);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String parse4Y2M2D1(Date date) {
+        try {
+            return getDateFormat(YYYY_MM_DD_1).format(date);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String parse2D2M4Y1(Date date) {
+        try {
+            return getDateFormat(DD_MM_YYYY_1).format(date);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Date get4Y2M2D(String date) {
+        try {
+            return getDateFormat(YYYY_MM_DD).parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static Date get4Y2M2D1(String date) {
+        try {
+            return getDateFormat(YYYY_MM_DD_1).parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static Date get2D2M4Y(String date) {
+        try {
+            return getDateFormat(DD_MM_YYYY).parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static Date get2D2M4Y1(String date) {
+        try {
+            return getDateFormat(DD_MM_YYYY_1).parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static Date getNextDay(Date date) {
+        return getNextNDay(date, 1);
+    }
+
+    public static Date getNextNDay(Date date, int day) {
+        if (Objects.nonNull(date)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE, day);
+            return calendar.getTime();
+        }
+        return null;
     }
 
 }
