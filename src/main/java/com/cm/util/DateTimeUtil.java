@@ -16,6 +16,8 @@ public class DateTimeUtil {
 
     private static final String DD_MM_YYYY = "dd/MM/yyyy";
 
+    private static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+
     private static final String YYYY_MM_DD_1 = "yyyy:MM:dd";
 
     private static final String DD_MM_YYYY_1 = "dd:MM:yyyy";
@@ -55,6 +57,22 @@ public class DateTimeUtil {
     public static String parse2D2M4Y1(Date date) {
         try {
             return getDateFormat(DD_MM_YYYY_1).format(date);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String parse4Y2M2D2H2M2S(Date date) {
+        try {
+            return getDateFormat(YYYY_MM_DD_HH_MM_SS).format(date);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Date get4Y2M2D2H2M2S(String date) {
+        try {
+            return getDateFormat(YYYY_MM_DD_HH_MM_SS).parse(date);
         } catch (Exception e) {
             return null;
         }

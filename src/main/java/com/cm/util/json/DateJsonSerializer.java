@@ -16,6 +16,6 @@ public class DateJsonSerializer extends JsonSerializer<Date> {
 
     @Override
     public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeString(date != null ? DateTimeUtil.parse4Y2M2D(date) : "null");
+        jsonGenerator.writeString(date != null ? DateTimeUtil.parse4Y2M2D2H2M2S(date) : "null");
     }
 }

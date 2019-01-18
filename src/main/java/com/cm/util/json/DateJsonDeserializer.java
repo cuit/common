@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -20,7 +19,7 @@ public class DateJsonDeserializer extends JsonDeserializer<Date> {
     public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         String date = jsonParser.getText();
         if (StringUtils.isNotBlank(date)) {
-            return DateTimeUtil.get4Y2M2D(date);
+            return DateTimeUtil.get4Y2M2D2H2M2S(date);
         }
         return null;
     }
