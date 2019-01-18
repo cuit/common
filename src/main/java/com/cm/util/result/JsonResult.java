@@ -70,7 +70,7 @@ public class JsonResult<T> {
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(17, 31, this);
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
