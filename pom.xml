@@ -13,6 +13,7 @@
         <slf4j-log4j.version>1.7.2</slf4j-log4j.version>
         <commons-lang3.version>3.3.1</commons-lang3.version>
         <jackson-databind.version>2.9.8</jackson-databind.version>
+        <guava.version>27.0.1-jre</guava.version>
     </properties>
 
     <dependencies>
@@ -32,6 +33,13 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson-databind.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
