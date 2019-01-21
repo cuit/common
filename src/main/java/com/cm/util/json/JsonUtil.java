@@ -45,6 +45,14 @@ public class JsonUtil {
         return null;
     }
 
+    /**
+     * 转换的实体 必须有无参构造器
+     *
+     * @param json  待转换的json字符串
+     * @param clazz 待转换的实体类
+     * @param <T>   泛型
+     * @return 实体
+     */
     public static <T> T toBean(String json, Class<T> clazz) {
         if (StringUtils.isNotBlank(json) && Objects.nonNull(clazz)) {
             try {
@@ -56,6 +64,14 @@ public class JsonUtil {
         return null;
     }
 
+    /**
+     * 转换的实体 必须有无参构造器
+     *
+     * @param json      待转换的json字符串
+     * @param reference 待转换的实体类
+     * @param <T>       泛型
+     * @return 实体
+     */
     public static <T> T toBean(String json, TypeReference<T> reference) {
         if (StringUtils.isNotBlank(json) && Objects.nonNull(reference)) {
             try {
