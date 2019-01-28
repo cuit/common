@@ -123,4 +123,18 @@ public class DateTimeUtil {
         return null;
     }
 
+    /**
+     * 获取传入时间所在月份的第一天的相关信息
+     */
+    public static Calendar getFirstDayOfMonth(Date date) {
+        if (Objects.nonNull(date)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            return calendar;
+        }
+        return null;
+    }
+
 }
+
