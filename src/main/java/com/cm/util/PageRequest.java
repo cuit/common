@@ -145,7 +145,7 @@ public class PageRequest implements Serializable {
         }
     }
 
-    public static enum Sort {
+    public enum Sort {
         // 降序
         DESC,
         // 升序
