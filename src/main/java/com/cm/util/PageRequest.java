@@ -78,13 +78,17 @@ public class PageRequest implements Serializable {
         public Page() {
         }
 
+        public Page(int pageNo) {
+            this(pageNo, 10);
+        }
+
         public Page(int pageNo, int pageSize) {
             this(pageNo, pageSize, null);
         }
 
         public Page(int pageNo, int pageSize, Sort sort) {
-            this.pageNo = pageNo;
-            this.pageSize = pageSize;
+            this.pageNo = pageNo < 1 ? 1 : pageNo;
+            this.pageSize = pageSize < 1 ? 1 : pageSize;
             this.sort = sort;
         }
 
@@ -155,7 +159,7 @@ public class PageRequest implements Serializable {
             try {
                 return Sort.valueOf(sort.toUpperCase(Locale.US));
             } catch (Exception e) {
-                throw new IllegalArgumentException(String.format("Invalid value '%s' for orders given! Has to be 'desc' or 'asc'.", sort), e);
+                throw new IllegalArgumentException(String.format("Invalid value '%s' for sort given! Has to be 'desc' or 'asc'.", sort), e);
             }
         }
 
