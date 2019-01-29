@@ -1,9 +1,8 @@
-package com.cm.util;
+package com.cm.util.page;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
-import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -146,29 +145,6 @@ public class PageRequest implements Serializable {
                     ", pageSize=" + pageSize +
                     ", sort=" + sort +
                     '}';
-        }
-    }
-
-    public enum Sort {
-        // 降序
-        DESC,
-        // 升序
-        ASC;
-
-        public static Sort fromString(String sort) {
-            try {
-                return Sort.valueOf(sort.toUpperCase(Locale.US));
-            } catch (Exception e) {
-                throw new IllegalArgumentException(String.format("Invalid value '%s' for sort given! Has to be 'desc' or 'asc'.", sort), e);
-            }
-        }
-
-        public static Sort fromStringOrNull(String sort) {
-            try {
-                return fromString(sort);
-            } catch (Exception e) {
-                return null;
-            }
         }
     }
 }
