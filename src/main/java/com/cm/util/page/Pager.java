@@ -16,7 +16,7 @@ public class Pager<T> implements Serializable {
 
     private static final long serialVersionUID = -4207240896912124652L;
 
-    private PageData pageData;
+    private PageData page;
 
     private List<T> data;
 
@@ -24,8 +24,8 @@ public class Pager<T> implements Serializable {
     }
 
     @JsonCreator
-    public Pager(@JsonProperty("pageData") PageData pageData, @JsonProperty("data") List<T> data) {
-        this.pageData = pageData;
+    public Pager(@JsonProperty("pageData") PageData page, @JsonProperty("data") List<T> data) {
+        this.page = page;
         this.data = Lists.newArrayList();
         this.data.addAll(data);
     }
@@ -34,12 +34,12 @@ public class Pager<T> implements Serializable {
         return new Builder<T>().data(data);
     }
 
-    public PageData getPageData() {
-        return pageData;
+    public PageData getPage() {
+        return page;
     }
 
-    public void setPageData(PageData pageData) {
-        this.pageData = pageData;
+    public void setPage(PageData page) {
+        this.page = page;
     }
 
     public List<T> getData() {
