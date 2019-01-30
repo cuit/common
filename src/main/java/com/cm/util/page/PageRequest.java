@@ -111,10 +111,6 @@ public class PageRequest implements Serializable {
             return sort;
         }
 
-        public void setSort(String sort) {
-            this.sort = Sort.fromString(sort);
-        }
-
         public void setSort(Sort sort) {
             this.sort = sort;
         }
