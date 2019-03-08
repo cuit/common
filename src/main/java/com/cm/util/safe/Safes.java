@@ -53,12 +53,13 @@ public class Safes {
 
     public static <T> T first(Iterable<T> source) {
         T t = null;
-        if (Objects.isNull(source)) {
-            return t;
-        }
-        Iterator<T> iterator = source.iterator();
-        if (iterator.hasNext()) {
-            t = iterator.next();
+        if (Objects.nonNull(source)) {
+            for (T t1 : source) {
+                t = t1;
+                if (Objects.nonNull(t)) {
+                    break;
+                }
+            }
         }
         return t;
     }
