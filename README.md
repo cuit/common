@@ -7,3 +7,4 @@
 ### PageRequest，Pager 分页请求和返回分页数据的工具类
 ### BizTemplate biz层处理的模板类
 ### JsonResult 返回前端json格式的数据的工具类
+### Safes 避免频繁判空
