@@ -1,4 +1,4 @@
-package com.cm.util.page;
+package com.xsc.util.page;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

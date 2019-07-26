@@ -1,6 +1,6 @@
-package com.cm.util.page;
+package com.xsc.util.page;
 
-import com.cm.util.assertions.XAssert;
+import com.xsc.util.assertions.XAssert;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;

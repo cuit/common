@@ -1,4 +1,4 @@
-package com.cm.util.safe;
+package com.xsc.util.safe;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

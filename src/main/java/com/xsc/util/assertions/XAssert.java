@@ -1,4 +1,4 @@
-package com.cm.util.assertions;
+package com.xsc.util.assertions;
 
 import java.util.Collection;
 

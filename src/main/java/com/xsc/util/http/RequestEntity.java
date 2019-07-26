@@ -1,4 +1,4 @@
-package com.cm.util.http;
+package com.xsc.util.http;
 
 import com.google.common.collect.Maps;
 
