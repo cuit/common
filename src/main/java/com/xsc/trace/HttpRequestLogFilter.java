@@ -4,6 +4,8 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -15,11 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author xia
@@ -27,22 +30,44 @@ import java.util.UUID;
  */
 public class HttpRequestLogFilter extends OncePerRequestFilter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestLogFilter.class);
+
+    private String[] excludeUrls;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String traceId = UUID.randomUUID().toString().replaceAll("-", "");
         MDC.put("TRACE_ID", traceId);
         long start = System.currentTimeMillis();
+        boolean flag = true;
         try {
-            filterChain.doFilter(request, response);
+            for (String s : excludeUrls) {
+                Pattern pattern = Pattern.compile(s);
+                Matcher matcher = pattern.matcher(request.getRequestURI());
+                if (matcher.find()) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (!flag) {
+                filterChain.doFilter(request, response);
+            } else {
+                TraceHttpResponseWrap responseWrap = new TraceHttpResponseWrap(response);
+                filterChain.doFilter(request, responseWrap);
+                PrintWriter writer = response.getWriter();
+                writer.write(responseWrap.getContent());
+                if (responseWrap.getContentType().contains("application/json")) {
+                    long end = System.currentTimeMillis();
+                    saveLog(traceId, request, responseWrap, start, end);
+                }
+            }
         } finally {
-            long end = System.currentTimeMillis();
-
             MDC.remove("TRACE_ID");
         }
     }
 
-    private void saveLog(String traceId, HttpServletRequest request, HttpServletResponse response, long start, long end) {
+    private void saveLog(String traceId, HttpServletRequest request, TraceHttpResponseWrap responseWrapper, long start, long end) {
         try {
             Map<String, String[]> map = request.getParameterMap();
             List<String> params = Lists.newArrayList();
@@ -63,21 +88,22 @@ public class HttpRequestLogFilter extends OncePerRequestFilter {
             while ((line = reader.readLine()) != null) {
                 requestBody.append(line);
             }
-            PrintWriter writer = response.getWriter();
-            writer.
             StringBuilder sb = new StringBuilder();
             sb.append("traceId:").append(traceId)
                     .append(",time=").append(end - start).append("ms")
-                    .append(",url:").append(request.getRequestURI())
+                    .append(",url=").append(request.getRequestURI())
+                    .append(",method=").append(request.getMethod())
                     .append(",request=").append(paramStr)
                     .append(",requestBody=").append(requestBody.toString())
-                    .append(",response=").append(response.get)
-
+                    .append(",status=").append(responseWrapper.getStatus())
+                    .append(",response=").append(responseWrapper.getContent());
+            LOGGER.info(sb.toString());
         } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-
+            LOGGER.error("日志记录出错!", e);
         }
+    }
 
+    public void setExcludeUrls(String[] excludeUrls) {
+        this.excludeUrls = excludeUrls;
     }
 }
