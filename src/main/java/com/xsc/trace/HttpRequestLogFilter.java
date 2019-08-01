@@ -20,7 +20,6 @@ import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,8 +36,8 @@ public class HttpRequestLogFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String traceId = UUID.randomUUID().toString().replaceAll("-", "");
-        MDC.put("TRACE_ID", traceId);
+        String traceId = TraceUtils.buildTraceId();
+        MDC.put(Constants.TRACE_ID, traceId);
         long start = System.currentTimeMillis();
         boolean flag = true;
         try {
