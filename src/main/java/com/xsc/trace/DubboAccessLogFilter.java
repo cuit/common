@@ -17,6 +17,10 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +50,18 @@ public class DubboAccessLogFilter implements Filter {
 
     public DubboAccessLogFilter(String fileName) {
         this.fileName = fileName;
+        String home = System.getProperty("catalina.base");
+        if (home == null) {
+            home = "target";
+        } else {
+            home = home + "/logs";
+        }
+        try {
+            home = new File(home).getCanonicalPath();
+        } catch (IOException e) {
+            LOGGER.debug("logger homepath failed: ", e);
+        }
+        fileName = home + "/" + fileName;
     }
 
     private static String getTraceId() {
@@ -67,6 +83,7 @@ public class DubboAccessLogFilter implements Filter {
 
     private void log(Invoker<?> invoker, Invocation invocation, Result result, long start, long end) {
         String msg = buildMsg(invoker, invocation, result, start, end);
+        EXECUTOR_SERVICE.submit(new MyTask());
         List<String> msgList = msgMap.get(fileName);
         if (msgList == null) {
             msgMap.putIfAbsent(fileName, Lists.newArrayList());
@@ -145,11 +162,39 @@ public class DubboAccessLogFilter implements Filter {
         @Override
         public void run() {
             synchronized (EXECUTOR_SERVICE) {
-                if (MapUtils.isNotEmpty(msgMap)) {
-                    for (Map.Entry<String, List<String>> entry : msgMap.entrySet()) {
-                        String fileName = entry.getKey();
-                        List<String> msgs = entry.getValue();
+                try {
+                    if (MapUtils.isNotEmpty(msgMap)) {
+                        for (Map.Entry<String, List<String>> entry : msgMap.entrySet()) {
+                            String fileName = entry.getKey();
+                            List<String> msgs = entry.getValue();
+                            File file = new File(fileName);
+                            File parent = file.getParentFile();
+                            if (parent != null && !parent.exists()) {
+                                parent.mkdirs();
+                            }
+                            if (file.exists()) {
+                                String now = new SimpleDateFormat("yyyyMMdd").format(new Date());
+                                String last = new SimpleDateFormat("yyyyMMdd").format(new Date(file.lastModified()));
+                                if (!now.equals(last)) {
+                                    File archive = new File(file.getAbsolutePath() + "." + last);
+                                    file.renameTo(archive);
+                                }
+                            }
+                            FileWriter writer = new FileWriter(file, true);
+                            try {
+                                for (String msg : msgs) {
+                                    writer.write(msg);
+                                    writer.write("\r\n");
+                                }
+                                writer.flush();
+                            } finally {
+                                writer.close();
+                            }
+                            msgs.clear();
+                        }
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
