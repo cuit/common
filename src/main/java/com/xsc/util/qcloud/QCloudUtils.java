@@ -141,11 +141,13 @@ public class QCloudUtils {
      * @param originFileName 文件的原始名称
      * @return 上传结果
      */
-    public static UploadResult upload(BucketEnum bucketEnum, InputStream inputStream, String originFileName) {
+    public static UploadResult upload(BucketEnum bucketEnum, InputStream inputStream, String originFileName, long size) {
         String renameFileName = DateFormatUtils.format(new Date(), "yyyyMMdd") + File.separator
                 + StringUtils.substring(originFileName, 0, originFileName.lastIndexOf('.'))
                 + UUID.randomUUID().toString().replaceAll("-", "") + StringUtils.substring(originFileName, originFileName.lastIndexOf('.'));
-        com.qcloud.cos.model.UploadResult upload = upload(bucketEnum, inputStream, renameFileName, null);
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(size);
+        com.qcloud.cos.model.UploadResult upload = upload(bucketEnum, inputStream, renameFileName, metadata);
         if (Objects.isNull(upload)) {
             LOGGER.error("上传失败!");
         }
