@@ -8,3 +8,4 @@
 ### BizTemplate biz层处理的模板类
 ### JsonResult 返回前端json格式的数据的工具类
 ### Safes 避免频繁判空
+### CheckEmailValid 通过SMTP协议判断邮箱是否可达
