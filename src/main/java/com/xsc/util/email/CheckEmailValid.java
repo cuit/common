@@ -35,6 +35,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
+ * 验证EMAIL地址的实现，参考文档{@link http://www.ruanyifeng.com/blog/2017/06/smtp-protocol.html}
+ *
  * @author xia
  * @date 2020/1/9 14:44
  */
