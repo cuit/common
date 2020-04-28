@@ -27,20 +27,10 @@ public class ConfigUtils {
 
     private static synchronized void loadProperties() {
         properties = new Properties();
-        InputStream inputStream = null;
-        try {
-            inputStream = ConfigUtils.class.getResourceAsStream("/default.properties");
+        try (InputStream inputStream = ConfigUtils.class.getResourceAsStream("/default.properties")) {
             properties.load(inputStream);
         } catch (IOException e) {
             LOGGER.error("Configuration file[default.properties] loading error! {}， {}", e.getMessage(), e);
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    LOGGER.error("file stream close error! {}， {}", e.getMessage(), e);
-                }
-            }
         }
     }
 
